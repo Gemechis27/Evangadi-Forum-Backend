@@ -9,7 +9,7 @@ CREATE TABLE `users` (
   `email` varchar(40) NOT NULL,
   `password` varchar(100) NOT NULL,
   PRIMARY KEY (`userid`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 INSERT INTO `users` (`userid`, `username`, `firstname`, `lastname`, `email`, `password`) VALUES
 (1, 'group1', 'Evangadi', 'forum', 'evangadiforum@email.com', '$2b$10$.PKTgBWINz1yU/Od6aVuFepBOv4jle89lVRhfQv5BykEUaXFIto26'),
@@ -34,7 +34,7 @@ CREATE TABLE `questions` (
   PRIMARY KEY (`questionid`),
   KEY `userid` (`userid`),
   CONSTRAINT `questions_ibfk_1` FOREIGN KEY (`userid`) REFERENCES `users` (`userid`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 INSERT INTO `questions` (`questionid`, `userid`, `title`, `description`, `tag`, `createdate`, `views`) VALUES
 (1, 1, 'first Question', 'This is first Question', 'testing-1', '2025-06-11 12:02:22', 0),
@@ -59,7 +59,7 @@ CREATE TABLE `answers` (
   KEY `questionid` (`questionid`),
   CONSTRAINT `answers_ibfk_1` FOREIGN KEY (`userid`) REFERENCES `users` (`userid`),
   CONSTRAINT `answers_ibfk_2` FOREIGN KEY (`questionid`) REFERENCES `questions` (`questionid`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 INSERT INTO `answers` (`answerid`, `userid`, `questionid`, `answer`, `createdate`, `views`, `edited`, `updated_at`) VALUES
 (1, 1, 2, 'second Question is get an answer', '2025-06-11 12:28:25', 0, 0, NULL),
@@ -84,7 +84,7 @@ CREATE TABLE `answer_comments` (
   KEY `userid` (`userid`),
   CONSTRAINT `answer_comments_ibfk_1` FOREIGN KEY (`answerid`) REFERENCES `answers` (`answerid`) ON DELETE CASCADE,
   CONSTRAINT `answer_comments_ibfk_2` FOREIGN KEY (`userid`) REFERENCES `users` (`userid`) ON DELETE SET NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 -- TABLE: answer_votes
 CREATE TABLE `answer_votes` (
@@ -98,4 +98,4 @@ CREATE TABLE `answer_votes` (
   KEY `userid` (`userid`),
   CONSTRAINT `answer_votes_ibfk_1` FOREIGN KEY (`answerid`) REFERENCES `answers` (`answerid`) ON DELETE CASCADE,
   CONSTRAINT `answer_votes_ibfk_2` FOREIGN KEY (`userid`) REFERENCES `users` (`userid`) ON DELETE SET NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
