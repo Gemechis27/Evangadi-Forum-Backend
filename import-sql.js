@@ -1,3 +1,5 @@
+console.log("🚀 import-sql.js script has started");
+
 const mysql = require('mysql2/promise');
 const fs = require('fs');
 require('dotenv').config();
@@ -7,11 +9,11 @@ require('dotenv').config();
     console.log("⏳ Connecting to DB...");
 
     const connection = await mysql.createConnection({
-      host: 'mysql.railway.internal',                // ✅ internal Railway DB host
-      port: 3306,                                     // ✅ default MySQL port
-      user: 'root',                                   // ✅ Railway user
-      password: 'xGFAFTpBnBEvAHRGwoBQmaXyCuGBIpUk',   // ✅ your Railway password
-      database: 'railway'                             // ✅ your DB name
+      host: 'mysql.railway.internal',
+      port: 3306,
+      user: 'root',
+      password: 'xGFAFTpBnBEvAHRGwoBQmaXyCuGBIpUk',
+      database: 'railway'
     });
 
     const sql = fs.readFileSync('./setup.sql', 'utf-8');
