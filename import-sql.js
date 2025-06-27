@@ -7,11 +7,11 @@ require('dotenv').config();
     console.log("⏳ Connecting to DB...");
 
     const connection = await mysql.createConnection({
-      host: process.env.MYSQLHOST,
-      port: process.env.MYSQLPORT,
-      user: process.env.MYSQLUSER,
-      password: process.env.MYSQLPASSWORD,
-      database: process.env.MYSQLDATABASE
+      host: 'mysql.railway.internal',                // ✅ internal Railway DB host
+      port: 3306,                                     // ✅ default MySQL port
+      user: 'root',                                   // ✅ Railway user
+      password: 'xGFAFTpBnBEvAHRGwoBQmaXyCuGBIpUk',   // ✅ your Railway password
+      database: 'railway'                             // ✅ your DB name
     });
 
     const sql = fs.readFileSync('./setup.sql', 'utf-8');
