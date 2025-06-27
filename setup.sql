@@ -1,6 +1,7 @@
--- Disable foreign key checks before dropping tables
+-- Disable foreign key checks to avoid dependency issues when dropping tables
 SET FOREIGN_KEY_CHECKS = 0;
 
+-- Drop existing tables if they exist
 DROP TABLE IF EXISTS answer_votes;
 DROP TABLE IF EXISTS answer_comments;
 DROP TABLE IF EXISTS answers;
@@ -11,17 +12,17 @@ DROP TABLE IF EXISTS users;
 SET FOREIGN_KEY_CHECKS = 1;
 
 -- USERS TABLE
-CREATE TABLE users (
-  userid INT(20) NOT NULL AUTO_INCREMENT,
-  username VARCHAR(20) NOT NULL,
-  firstname VARCHAR(20) NOT NULL,
-  lastname VARCHAR(20) NOT NULL,
-  email VARCHAR(40) NOT NULL,
-  password VARCHAR(100) NOT NULL,
-  PRIMARY KEY (userid)
+CREATE TABLE `users` (
+  `userid` int(20) NOT NULL AUTO_INCREMENT,
+  `username` varchar(20) NOT NULL,
+  `firstname` varchar(20) NOT NULL,
+  `lastname` varchar(20) NOT NULL,
+  `email` varchar(40) NOT NULL,
+  `password` varchar(100) NOT NULL,
+  PRIMARY KEY (`userid`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
-INSERT INTO users (userid, username, firstname, lastname, email, password) VALUES
+INSERT INTO `users` (`userid`, `username`, `firstname`, `lastname`, `email`, `password`) VALUES
 (1, 'group1', 'Evangadi', 'forum', 'evangadiforum@email.com', '$2b$10$.PKTgBWINz1yU/Od6aVuFepBOv4jle89lVRhfQv5BykEUaXFIto26'),
 (2, 'admin', 'Gemechis', 'mulisa', 'gemechisdaba27@gmail.com', '$2b$10$5kJOqkfpCzw2aCON7Xilg.w604HS0exKe63Tooju0QvRMBYHrohBC'),
 (3, 'gmy', 'Gemechis', 'mulisa', 'gemechisdaba@gmail.com', '$2b$10$OhcQO/M7nd1pu8mIFr6MDetEhA3Hj4rbvajrz3K6feMzuL.aRFWgy'),
@@ -33,20 +34,20 @@ INSERT INTO users (userid, username, firstname, lastname, email, password) VALUE
 (9, 'bbboy', 'baby', 'boy', 'babyboy@gmail.com', '$2b$10$l42.NPIhqhdeGzm/CKf9/utO7mQI6Mmx6mVkfrjyKBLzr92dtXi2y');
 
 -- QUESTIONS TABLE
-CREATE TABLE questions (
-  questionid INT(11) NOT NULL AUTO_INCREMENT,
-  userid INT(20) NOT NULL,
-  title VARCHAR(50) NOT NULL,
-  description VARCHAR(200) NOT NULL,
-  tag VARCHAR(50) DEFAULT NULL,
-  createdate TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  views INT(11) DEFAULT 0,
-  PRIMARY KEY (questionid),
-  KEY (userid),
-  CONSTRAINT questions_ibfk_1 FOREIGN KEY (userid) REFERENCES users(userid)
+CREATE TABLE `questions` (
+  `questionid` int(11) NOT NULL AUTO_INCREMENT,
+  `userid` int(20) NOT NULL,
+  `title` varchar(50) NOT NULL,
+  `description` varchar(200) NOT NULL,
+  `tag` varchar(50) DEFAULT NULL,
+  `createdate` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `views` int(11) DEFAULT '0',
+  PRIMARY KEY (`questionid`),
+  KEY `userid` (`userid`),
+  CONSTRAINT `questions_ibfk_1` FOREIGN KEY (`userid`) REFERENCES `users` (`userid`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
-INSERT INTO questions (questionid, userid, title, description, tag, createdate, views) VALUES
+INSERT INTO `questions` (`questionid`, `userid`, `title`, `description`, `tag`, `createdate`, `views`) VALUES
 (1, 1, 'first Question', 'This is first Question', 'testing-1', '2025-06-11 12:02:22', 0),
 (2, 1, 'Second Question', 'This is second Question', 'testing-2', '2025-06-11 12:05:00', 0),
 (3, 6, 'what is React?', 'Give me discription about react', '', '2025-06-14 19:53:47', 0),
@@ -55,23 +56,23 @@ INSERT INTO questions (questionid, userid, title, description, tag, createdate, 
 (6, 9, 'react', 'what is react', 'React', '2025-06-26 08:04:34', 2);
 
 -- ANSWERS TABLE
-CREATE TABLE answers (
-  answerid INT(20) NOT NULL AUTO_INCREMENT,
-  userid INT(20) NOT NULL,
-  questionid INT(11) NOT NULL,
-  answer VARCHAR(200) NOT NULL,
-  createdate TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  views INT(11) DEFAULT 0,
-  edited TINYINT(1) DEFAULT 0,
-  updated_at TIMESTAMP NULL DEFAULT NULL,
-  PRIMARY KEY (answerid),
-  KEY (userid),
-  KEY (questionid),
-  CONSTRAINT answers_ibfk_1 FOREIGN KEY (userid) REFERENCES users(userid),
-  CONSTRAINT answers_ibfk_2 FOREIGN KEY (questionid) REFERENCES questions(questionid)
+CREATE TABLE `answers` (
+  `answerid` int(20) NOT NULL AUTO_INCREMENT,
+  `userid` int(20) NOT NULL,
+  `questionid` int(11) NOT NULL,
+  `answer` varchar(200) NOT NULL,
+  `createdate` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `views` int(11) DEFAULT '0',
+  `edited` tinyint(1) DEFAULT '0',
+  `updated_at` timestamp NULL DEFAULT NULL,
+  PRIMARY KEY (`answerid`),
+  KEY `userid` (`userid`),
+  KEY `questionid` (`questionid`),
+  CONSTRAINT `answers_ibfk_1` FOREIGN KEY (`userid`) REFERENCES `users` (`userid`),
+  CONSTRAINT `answers_ibfk_2` FOREIGN KEY (`questionid`) REFERENCES `questions` (`questionid`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
-INSERT INTO answers (answerid, userid, questionid, answer, createdate, views, edited, updated_at) VALUES
+INSERT INTO `answers` (`answerid`, `userid`, `questionid`, `answer`, `createdate`, `views`, `edited`, `updated_at`) VALUES
 (1, 1, 2, 'second Question is get an answer', '2025-06-11 12:28:25', 0, 0, NULL),
 (2, 6, 3, 'React is a JavaScript library for building user interfaces (UIs), especially for SPAs.', '2025-06-14 19:54:56', 0, 0, NULL),
 (3, 6, 3, 'UI is broken into reusable, self-contained components.', '2025-06-14 19:56:37', 0, 0, NULL),
@@ -83,29 +84,29 @@ INSERT INTO answers (answerid, userid, questionid, answer, createdate, views, ed
 (9, 8, 1, 'hellow there', '2025-06-16 17:19:55', 0, 0, NULL);
 
 -- ANSWER COMMENTS TABLE
-CREATE TABLE answer_comments (
-  commentid INT(11) NOT NULL AUTO_INCREMENT,
-  answerid INT(11) NOT NULL,
-  userid INT(11) DEFAULT NULL,
-  comment TEXT NOT NULL,
-  created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  PRIMARY KEY (commentid),
-  KEY (answerid),
-  KEY (userid),
-  CONSTRAINT answer_comments_ibfk_1 FOREIGN KEY (answerid) REFERENCES answers(answerid) ON DELETE CASCADE,
-  CONSTRAINT answer_comments_ibfk_2 FOREIGN KEY (userid) REFERENCES users(userid) ON DELETE SET NULL
+CREATE TABLE `answer_comments` (
+  `commentid` int(11) NOT NULL AUTO_INCREMENT,
+  `answerid` int(11) NOT NULL,
+  `userid` int(11) DEFAULT NULL,
+  `comment` text NOT NULL,
+  `created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY (`commentid`),
+  KEY `answerid` (`answerid`),
+  KEY `userid` (`userid`),
+  CONSTRAINT `answer_comments_ibfk_1` FOREIGN KEY (`answerid`) REFERENCES `answers` (`answerid`) ON DELETE CASCADE,
+  CONSTRAINT `answer_comments_ibfk_2` FOREIGN KEY (`userid`) REFERENCES `users` (`userid`) ON DELETE SET NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- ANSWER VOTES TABLE
-CREATE TABLE answer_votes (
-  voteid INT(11) NOT NULL AUTO_INCREMENT,
-  answerid INT(11) NOT NULL,
-  userid INT(11) DEFAULT NULL,
-  vote TINYINT(4) NOT NULL,
-  created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  PRIMARY KEY (voteid),
-  UNIQUE KEY unique_vote (answerid, userid),
-  KEY (userid),
-  CONSTRAINT answer_votes_ibfk_1 FOREIGN KEY (answerid) REFERENCES answers(answerid) ON DELETE CASCADE,
-  CONSTRAINT answer_votes_ibfk_2 FOREIGN KEY (userid) REFERENCES users(userid) ON DELETE SET NULL
+CREATE TABLE `answer_votes` (
+  `voteid` int(11) NOT NULL AUTO_INCREMENT,
+  `answerid` int(11) NOT NULL,
+  `userid` int(11) DEFAULT NULL,
+  `vote` tinyint(4) NOT NULL,
+  `created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY (`voteid`),
+  UNIQUE KEY `unique_vote` (`answerid`, `userid`),
+  KEY `userid` (`userid`),
+  CONSTRAINT `answer_votes_ibfk_1` FOREIGN KEY (`answerid`) REFERENCES `answers` (`answerid`) ON DELETE CASCADE,
+  CONSTRAINT `answer_votes_ibfk_2` FOREIGN KEY (`userid`) REFERENCES `users` (`userid`) ON DELETE SET NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
