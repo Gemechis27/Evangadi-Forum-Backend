@@ -1,15 +1,4 @@
--- Disable foreign key checks to drop tables safely
-SET FOREIGN_KEY_CHECKS = 0;
 
-DROP TABLE IF EXISTS answer_votes;
-DROP TABLE IF EXISTS answer_comments;
-DROP TABLE IF EXISTS answers;
-DROP TABLE IF EXISTS questions;
-DROP TABLE IF EXISTS users;
-
-SET FOREIGN_KEY_CHECKS = 1;
-
--- USERS
 CREATE TABLE users (
   userid INT AUTO_INCREMENT PRIMARY KEY,
   username VARCHAR(20) NOT NULL,
@@ -19,7 +8,7 @@ CREATE TABLE users (
   password VARCHAR(100) NOT NULL
 );
 
--- QUESTIONS
+
 CREATE TABLE questions (
   questionid INT AUTO_INCREMENT PRIMARY KEY,
   userid INT NOT NULL,
@@ -31,7 +20,7 @@ CREATE TABLE questions (
   FOREIGN KEY (userid) REFERENCES users(userid)
 );
 
--- ANSWERS
+
 CREATE TABLE answers (
   answerid INT AUTO_INCREMENT PRIMARY KEY,
   userid INT NOT NULL,
